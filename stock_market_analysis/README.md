@@ -1,47 +1,42 @@
-# Stock Market Analysis — Data Collection & EDA (Python)
+# Stock Market Analysis (India vs US) — Python
 
-> 🔗 This project continues with SQL analysis in the [sql_projects repo](https://github.com/tharunsajeev/sql_projects/tree/main/stock_market_analysis) — see that repo for the full set of analytical queries run on this same dataset.
+> Continues with SQL analysis here: [sql-projects/stock_market_analysis](https://github.com/tharunsajeev/sql-projects/tree/main/stock_market_analysis)
 
-## Project Overview
+## What this is
 
-Collects live daily stock market data for 6 Indian stocks (RELIANCE, TCS, INFY, HDFCBANK, WIPRO, ICICIBANK) and 2 US stocks (AAPL, MSFT) via the Alpha Vantage API, cleans and structures it with pandas, then explores returns, volatility, and trend direction through visualization.
+I wanted a project where I sourced the data myself instead of using an already-cleaned Kaggle CSV, so this one starts from a live API. I pulled 100 days of daily price data for 6 Indian stocks (RELIANCE, TCS, INFY, HDFCBANK, WIPRO, ICICIBANK) and 2 US stocks (AAPL, MSFT), cleaned it with pandas, and explored returns, volatility, and trend direction.
 
-## Tools Used
+## How it works
 
-- `requests` — API calls to Alpha Vantage
-- `pandas` — data cleaning, aggregation, window calculations
-- `matplotlib` — price charts and moving average overlays
+I used the Alpha Vantage API's `TIME_SERIES_DAILY` endpoint to pull OHLCV (open, high, low, close, volume) data for each stock, with `requests` handling the API calls and `time.sleep()` managing the free tier's 5-calls-per-minute limit. Each response gets parsed into a pandas DataFrame, and all 8 stocks are combined into a single 800-row dataset.
 
-## Data Source
+From there the notebook covers:
+- period returns for each stock (first close vs last close)
+- volatility, measured as average daily high-low range
+- a 20-day moving average plotted against the daily close price
+- individual price charts per stock, since plotting all 8 on one shared scale made the US stocks look flat next to the higher-priced Indian ones
 
-Daily OHLCV (Open, High, Low, Close, Volume) data from the [Alpha Vantage](https://www.alphavantage.co/) `TIME_SERIES_DAILY` endpoint — 100 trading days per ticker, Jan 16 – Jun 11, 2026.
+## What I found
 
-## What's in This Notebook
+AAPL was the only stock that gained value over the period, up about 19%. Every other stock I tracked lost value, and the Indian IT stocks dropped the hardest — TCS down roughly 30%, INFY down roughly 31%. That tracks with what's been happening more broadly with Indian IT this year: concerns about US clients cutting spending, and some nervousness around AI eating into the services these companies sell. TCS and INFY were also the most volatile stocks in the dataset, which makes sense given how sharp the decline was.
 
-1. **API setup & data collection** — fetch function with error handling for rate limits and invalid responses
-2. **Data cleaning** — type conversion, null checks, combining 8 tickers into one DataFrame
-3. **Exploratory analysis** — period returns, daily volatility (high-low range), monthly trend
-4. **Visualization** — individual price charts per stock, 20-day moving average overlay
+## Tools
 
-## Key Findings
+Python, `requests`, `pandas`, `matplotlib`, Google Colab
 
-- **AAPL was the only stock with a positive return (+19.3%)** over the 100-day window; every other tracked stock declined.
-- **TCS (-30.4%) and INFY (-31.5%)** were the worst performers, consistent with broader pressure on Indian IT stocks tied to US client spending and AI disruption concerns.
-- **TCS and INFY also showed the highest day-to-day volatility**, despite (or because of) their steep declines.
-- The 20-day moving average confirmed a sustained downtrend across Indian stocks and a sustained uptrend in AAPL, visible clearly when each stock is plotted on its own price scale.
+## A few things that didn't work on the first try
 
-## Challenges & How They Were Solved
+- Alpha Vantage's rate limit kept cutting off my fetch loop partway through, so I added retry logic for whichever ticker failed
+- Indian stocks need an exchange suffix like `.BSE` — I had a typo in one ticker's symbol that caused a confusing "Invalid API call" error with no useful detail, and the only way I found the issue was printing the actual request URL and comparing it against one I knew worked
+- My first price chart plotted all 8 stocks on the same axis, which made AAPL look almost flat since it trades in a completely different price range than the Indian stocks — switching to one subplot per stock fixed that
 
-- **API rate limiting** — Alpha Vantage's free tier allows 5 calls/minute. Added `time.sleep()` between requests and a retry step for any ticker that failed mid-loop.
-- **Symbol formatting** — Indian tickers needed exchange suffixes (`.BSE`); a typo here produced a silent "Invalid API call" error, traced by comparing `response.url` against a known working request.
-- **Scale mismatch in charts** — plotting all 8 stocks on one shared axis made AAPL's price movement look flat, since Indian stock prices are 5-10x higher. Solved by giving each stock its own subplot.
 
 ## How to Run
 
 1. Get a free API key from [alphavantage.co](https://www.alphavantage.co/support/#api-key)
 2. Open `stock_analysis.ipynb` in Google Colab
 3. Add your key to Colab's secret manager as `ALPHA_VANTAGE_KEY` and load it with `userdata.get('ALPHA_VANTAGE_KEY')`
-4. Run all cells top to bottom — the fetch loop takes ~3 minutes due to rate limiting
+4. Run all cells. The data fetch takes a few minutes because of the rate limit.
 
 ## Author
 
