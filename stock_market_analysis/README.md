@@ -1,6 +1,6 @@
-# Stock Market Analysis (India vs US) — Python
+# Stock Market Analysis (India vs US) - Python
 
-> Continues with SQL analysis here: [sql-projects/stock_market_analysis](https://github.com/tharunsajeev/sql-projects/tree/main/stock_market_analysis)
+> Continues with SQL analysis here: [sql-projects/stock_market_analysis](https://github.com/tharunsajeev/Sql-projects/tree/main/stock_market_analysis)
 
 ## What this is
 
@@ -8,7 +8,7 @@ I wanted a project where I sourced the data myself instead of using an already-c
 
 ## How it works
 
-I used the Alpha Vantage API's `TIME_SERIES_DAILY` endpoint to pull OHLCV (open, high, low, close, volume) data for each stock, with `requests` handling the API calls and `time.sleep()` managing the free tier's 5-calls-per-minute limit. Each response gets parsed into a pandas DataFrame, and all 8 stocks are combined into a single 800-row dataset.
+I used the Alpha Vantage API's `TIME_SERIES_DAILY` endpoint to pull OHLCV (open, high, low, close, volume) data for each stock, with `requests` handling the API calls and `time.sleep()` managing the free tier's 5 calls per-minute limit. Each response gets parsed into a pandas DataFrame, and all 8 stocks are combined into a single 800-row dataset.
 
 From there the notebook covers:
 - period returns for each stock (first close vs last close)
@@ -18,7 +18,7 @@ From there the notebook covers:
 
 ## What I found
 
-AAPL was the only stock that gained value over the period, up about 19%. Every other stock I tracked lost value, and the Indian IT stocks dropped the hardest — TCS down roughly 30%, INFY down roughly 31%. That tracks with what's been happening more broadly with Indian IT this year: concerns about US clients cutting spending, and some nervousness around AI eating into the services these companies sell. TCS and INFY were also the most volatile stocks in the dataset, which makes sense given how sharp the decline was.
+AAPL was the only stock that gained value over the period, up about 19%. Every other stock I tracked lost value, and the Indian IT stocks dropped the hardest - TCS down roughly 30%, INFY down roughly 31%. That tracks with what's been happening more broadly with Indian IT this year: concerns about US clients cutting spending, and some nervousness around AI eating into the services these companies sell. TCS and INFY were also the most volatile stocks in the dataset, which makes sense given how sharp the decline was.
 
 ## Tools
 
@@ -27,7 +27,7 @@ Python, `requests`, `pandas`, `matplotlib`, Google Colab
 ## A few things that didn't work on the first try
 
 - Alpha Vantage's rate limit kept cutting off my fetch loop partway through, so I added retry logic for whichever ticker failed
-- Indian stocks need an exchange suffix like `.BSE` — I had a typo in one ticker's symbol that caused a confusing "Invalid API call" error with no useful detail, and the only way I found the issue was printing the actual request URL and comparing it against one I knew worked
+- Indian stocks need an exchange suffix like `.BSE` I had a typo in one ticker's symbol that caused a confusing "Invalid API call" error with no useful detail, and the only way I found the issue was printing the actual request URL and comparing it against one I knew worked
 - My first price chart plotted all 8 stocks on the same axis, which made AAPL look almost flat since it trades in a completely different price range than the Indian stocks — switching to one subplot per stock fixed that
 
 
