@@ -8,7 +8,7 @@ I wanted a project where I sourced the data myself instead of using an already-c
 
 ## How it works
 
-I used the Alpha Vantage API's `TIME_SERIES_DAILY` endpoint to pull OHLCV (open, high, low, close, volume) data for each stock, with `requests` handling the API calls and `time.sleep()` managing the free tier's 5 calls per-minute limit. Each response gets parsed into a pandas DataFrame, and all 8 stocks are combined into a single 800-row dataset.
+I used the Alpha Vantage API's `TIME_SERIES_DAILY` endpoint to pull OHLCV (open, high, low, close, volume) data for each stock, with `requests` handling the API calls and `time.sleep()` managing the free tier's 5 calls per-minute limit. Each response gets parsed into a pandas DataFrame, and all 8 stocks are combined into a single 800 row dataset.
 
 From there the notebook covers:
 - period returns for each stock (first close vs last close)
@@ -28,7 +28,7 @@ Python, `requests`, `pandas`, `matplotlib`, Google Colab
 
 - Alpha Vantage's rate limit kept cutting off my fetch loop partway through, so I added retry logic for whichever ticker failed
 - Indian stocks need an exchange suffix like `.BSE` I had a typo in one ticker's symbol that caused a confusing "Invalid API call" error with no useful detail, and the only way I found the issue was printing the actual request URL and comparing it against one I knew worked
-- My first price chart plotted all 8 stocks on the same axis, which made AAPL look almost flat since it trades in a completely different price range than the Indian stocks — switching to one subplot per stock fixed that
+- My first price chart plotted all 8 stocks on the same axis, which made AAPL look almost flat since it trades in a completely different price range than the Indian stocks - switching to one subplot per stock fixed that
 
 
 ## How to Run
