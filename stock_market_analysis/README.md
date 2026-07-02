@@ -38,6 +38,8 @@ Python, `requests`, `pandas`, `matplotlib`, Google Colab
 3. Add your key to Colab's secret manager as `ALPHA_VANTAGE_KEY` and load it with `userdata.get('ALPHA_VANTAGE_KEY')`
 4. Run all cells. The data fetch takes a few minutes because of the rate limit.
 
+Data source: Alpha Vantage API (alphavantage.co)
+
 ## Author
 
 [Tharun Sajeev](https://github.com/tharunsajeev)
